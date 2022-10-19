@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+
+import {Login} from './pages/login'
+import {Rooms} from './pages/rooms'
+import {Classes} from './pages/classes'
+import {Instructors} from './pages/instructors'
+import {Assigned} from './pages/assigned'
+import {Attends} from './pages/attends'
+import {Members} from './pages/members'
+import {Reservation} from './pages/reservation'
+import {Squash} from './pages/squash'
+import {Devices} from './pages/devices'
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+     <Routes>
+      <Route path="/login" element={<Login/>}/>
+      <Route path="/rooms" element={<Rooms/>}/>
+      <Route path="/classes" element={<Classes/>}/>
+      <Route path="/intructors" element={<Instructors/>}/>
+      <Route path="/assigned" element={<Assigned/>}/>
+      <Route path="/attends" element={<Attends/>}/>
+      <Route path="/members" element={<Members/>}/>
+      <Route path="/reservation" element={<Reservation/>}/>
+      <Route path="/squash" element={<Squash/>}/>
+      <Route path="/devices" element={<Devices/>}/>
+     </Routes>
+    </>
   );
 }
 
