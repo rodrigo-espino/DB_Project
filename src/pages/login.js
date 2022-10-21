@@ -17,7 +17,7 @@ export function Login() {
       Cookies.set("Session", user);
       window.location.reload();
     } else {
-      setError("Hola");
+      setError(data.msg);
       toast(error, { type: "error" });
     }
   };
