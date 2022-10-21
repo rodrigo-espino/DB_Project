@@ -9,7 +9,7 @@ export function ProtectedRoute({c, children}) {
 
 export function Verify({c, children}) {
     if(c){
-        return<Navigate to="/rooms"/>
+        return<Navigate to="/dashboard"/>
     } 
     return <Outlet/>
 }
