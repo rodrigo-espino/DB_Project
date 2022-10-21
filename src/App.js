@@ -12,11 +12,14 @@ import { Routes, Route } from "react-router-dom";
 import { ProtectedRoute, Verify } from './components/ProtectedRoute'
 import Cookies from 'js-cookie'
 
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 function App() {
   return (
     <>
+    <ToastContainer/>
      <Routes>
-
+    
       <Route element={<Verify c = {Cookies.get('Session')}/>}> 
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login/>}/>

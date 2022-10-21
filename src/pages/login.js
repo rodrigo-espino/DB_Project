@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { API } from "../components/API";
-
+import { toast } from "react-toastify";
 export function Login() {
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
@@ -17,22 +17,27 @@ export function Login() {
       Cookies.set("Session", user);
       window.location.reload();
     } else {
-      setError(data.msg);
+      setError("Hola");
+      toast(error, { type: "error" });
     }
   };
 
   return (
     <>
-      {error ? (
-        <div class="alert alert-danger" role="alert">
-          {error}
-        </div>
-      ) : (
-        <div></div>
-      )}
-      <form onSubmit={handleSignIn} className="card card-body">
-        <div className="form-group">
-          <input
+      <div className="text-center py-5">
+        <main className="form-signin w-50 m-auto">
+          <form onSubmit={handleSignIn}>
+            <img
+              className="mb-4"
+              src="../assets/brand/bootstrap-logo.svg"
+              alt=""
+              width="72"
+              height="57"
+            />
+            <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+
+            <div className="form-floating">
+            <input
             type="text"
             onChange={(e) => setUser(e.target.value)}
             value={user}
@@ -40,21 +45,28 @@ export function Login() {
             placeholder="User"
             autoFocus
           />
-          <br />
-        </div>
-        <div className="form-group">
-          <input
+              <br />
+              <label htmlFor="floatingInput">Username</label>
+            </div>
+            <div className="form-floating">
+            <input
             type="password"
             onChange={(e) => setPass(e.target.value)}
             value={pass}
             className="form-control"
             placeholder="Password"
           />
-          <br />
-        </div>
+              <br />
+              <label htmlFor="floatingPassword">Password</label>
+            </div>
 
-        <button className="btn btn-primary btn-block">Sign In</button>
-      </form>
+            <button className="w-100 btn btn-lg btn-primary">
+              Sign in
+            </button>
+        
+          </form>
+        </main>
+      </div>
     </>
   );
 }
