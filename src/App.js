@@ -9,6 +9,7 @@ import {Members} from './pages/members'
 import {Reservation} from './pages/reservation'
 import {Squash} from './pages/squash'
 import {Devices} from './pages/devices'
+import {Dashboard} from './pages/Dashboard'
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <Route path="/reservation" element={<Reservation/>}/>
       <Route path="/squash" element={<Squash/>}/>
       <Route path="/devices" element={<Devices/>}/>
+      <Route path="/dashboard" element={<Dashboard/>}/>
      </Routes>
     </>
   );
