@@ -11,15 +11,18 @@ import {Squash} from './pages/squash'
 import {Devices} from './pages/devices'
 import { Routes, Route } from "react-router-dom";
 
-import { ProtectedRoute } from './components/ProtectedRoute'
+import { ProtectedRoute, Verify } from './components/ProtectedRoute'
 import Cookies from 'js-cookie'
 
 function App() {
   return (
     <>
      <Routes>
+
+      <Route element={<Verify c = {Cookies.get('Session')}/>}> 
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login/>}/>
+      </Route>
 
       <Route element={<ProtectedRoute c = {Cookies.get('Session')}/>}>
         <Route path="/rooms" element={<Rooms/>}/>
