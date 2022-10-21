@@ -8,12 +8,13 @@ import {Squash} from './pages/squash'
 import {Devices} from './pages/devices'
 import {Dashboard} from './pages/Dashboard'
 import { Routes, Route } from "react-router-dom";
-
+import { Users } from './pages/users'
 import { ProtectedRoute, Verify } from './components/ProtectedRoute'
 import Cookies from 'js-cookie'
 
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
 function App() {
   return (
     <>
@@ -33,6 +34,7 @@ function App() {
         <Route path="/squash" element={<Squash/>}/>
         <Route path="/devices" element={<Devices/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/users" element={<Users/>}/>
       </Route>
       
      </Routes>
