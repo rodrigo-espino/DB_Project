@@ -8,7 +8,7 @@ export function Members() {
 
   const [Id, setId] = useState("");
   const [memb_id, setmemb] = useState("");
-  const [class_id, setclass_id] = useState("");
+  const [class_id, setclass_id] = useState([]);
   const [Data, setData] = useState([]);
 
   const [name, setName] = useState("");
@@ -30,6 +30,8 @@ export function Members() {
     setBank("");
     setediting(false);
   };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await fetch(`${API}/members`, {
@@ -45,11 +47,23 @@ export function Members() {
         bank_det,
       }),
     });
-    const rjson = await res.json();
+    const rjson  = await res.json();
+    const idmemberjson = await rjson.id;
     console.log(rjson);
-    setmemb(rjson.id);
-
-  console.log(class_id)
+    setmemb(await idmemberjson);
+    if(!setmemb){
+      let a = false
+      while (a == false){
+        if(!setmemb){
+      setmemb(await idmemberjson);
+        }else{
+          a = true
+        }
+    }
+  }
+  
+  console.log("memb_id");
+  console.log(memb_id);
     const resClass = await fetch(`${API}/attends`, {
       method: "POST",
       headers: {
@@ -60,7 +74,7 @@ export function Members() {
         class_id,
       }),
     });
-    await resClass.json();
+   await resClass.json();
   };
 
   const getMembers = async () => {
@@ -169,28 +183,25 @@ export function Members() {
                         </div>
                         <div className="card-body">
                           <div className="mb-3">
-                            <input 
-                              list = "classes"
-                              name="class_id"
-                              onChange={(e) => setclass_id(e.target.value)}
-                              value={class_id}
-                              className="form-select"
-                              id="class_id"
-                              placeholder="Select Class"
+                            
+                          
+                          <div class="form-check">
+                     
+                         
 
-                            />
-                            <datalist
-                              id="classes"
-           
-                            >
-                              {classe.map((i) => (
+<select class="form-select" multiple aria-label="multiple select example"  onChange={(e) => setclass_id(e.target.value)}>
+{classe.map((i) => (
                                 <option value={i.id}
                                 key={i.id}
                                 >{i.description}</option>
                               ))}
-                            </datalist>
+</select>
+
+
+                              
                           </div>
                         </div>
+                      </div>
                       </div>
                     </form>
                   </div>
@@ -216,6 +227,8 @@ export function Members() {
                 </div>
               </div>
             </div>
+
+            {/** Others*/}
           </div>
           <div className="col-6 col-md-4 text-end">
             <form className="row g-3">
