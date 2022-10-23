@@ -204,7 +204,7 @@ export function Users() {
                     className="form-control"
                     id="name"
                     onChange={(e) => setuser(e.target.value)}
-                    value={phone}
+                    value={user}
                   />
                   <label htmlFor="Name">Pass</label>
                   <input
@@ -212,7 +212,7 @@ export function Users() {
                     className="form-control"
                     id="name"
                     onChange={(e) => setpass(e.target.value)}
-                    value={experience}
+                    value={pass}
                   />
                 </form>
               </div>
