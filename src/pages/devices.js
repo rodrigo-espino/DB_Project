@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
 export function Devices() {
   const [Id, setId] = useState("");
-  const [Room_Id, setRoomid] = useState("");
   const [data, setdata] = useState([]);
   const [descr, setdescr] = useState("");
   const [st, setst] = useState("");
+  const [Room_Id, setRoomid] = useState("");
   const [editing, setediting] = useState(false);
   //Getting info from RESTAPI
   const getData = async () => {
@@ -32,9 +32,9 @@ export function Devices() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          meters,
-          location,
-          typeofR,
+          descr,
+          st,
+          Room_Id,
         }),
       });
       const resjson = await res.json();
@@ -47,9 +47,9 @@ export function Devices() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          meters,
-          location,
-          typeofR,
+          descr,
+          st,
+          Room_Id,
         }),
       });
 
@@ -60,7 +60,7 @@ export function Devices() {
   };
 
   //editDevices
-  const editRooms = async (id) => {
+  const editDevices = async (id) => {
     setediting(true);
     const res = await fetch(`${API}/devices/${id}`);
     const dres = await res.json();
@@ -158,7 +158,7 @@ export function Devices() {
                     className="btn btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#updateModal"
-                    onClick={(e) => editRooms(i.id)}
+                    onClick={(e) => editDevices(i.id)}
                   >
                     See More...
                   </button>
