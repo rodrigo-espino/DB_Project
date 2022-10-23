@@ -149,9 +149,9 @@ export function Devices() {
           <tbody>
             {data.map((i) => (
               <tr key={i.id}>
-                <td>{i.meters}</td>
-                <td>{i.location}</td>
-                <td>{i.typeofR}</td>
+                <td>{i.descr}</td>
+                <td>{i.st}</td>
+                <td>{i.Room_Id}</td>
                 <td>
                   <button
                     type="button"
