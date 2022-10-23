@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
 export function Rooms() {
   const [Id, setId] = useState("");
+  const [data, setdata] = useState([]);
   const [meters, setmeters] = useState("");
   const [location, setlocation] = useState("");
   const [type, settype] = useState("");
@@ -206,12 +207,12 @@ export function Rooms() {
                     onChange={(e) => setlocation(e.target.value)}
                     value={location}
                   />
-                  <label htmlFor="Name">Pass</label>
+                  <label htmlFor="Name">Type</label>
                   <input
                     type="text"
                     className="form-control"
                     id="name"
-                    onChange={(e) => setpass(e.target.value)}
+                    onChange={(e) => settype(e.target.value)}
                     value={type}
                   />
                 </form>
