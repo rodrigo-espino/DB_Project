@@ -5,23 +5,26 @@ export function Rooms() {
   const [data, setdata] = useState([]);
   const [meters, setmeters] = useState("");
   const [location, setlocation] = useState("");
-  const [type, settype] = useState("");
+  const [typeofR, settype] = useState("");
   const [editing, setediting] = useState(false);
   //Getting info from RESTAPI
   const getData = async () => {
-    const res = await fetch(`${API}/users`);
+    const res = await fetch(`${API}/rooms`);
     const rdata = await res.json();
     setdata(rdata);
+    console.log("Data")
     console.log(data);
+
   };
 
   //Search Room
+  
   
     
 
 
   //Create a new Room
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     if (!editing) {
       const res = await fetch(`${API}/rooms`, {
         method: "POST",
@@ -31,10 +34,12 @@ export function Rooms() {
         body: JSON.stringify({
           meters,
           location,
-          type,
+          typeofR,
         }),
       });
-      await res.json();
+      const resjson = await res.json();
+      
+      console.log(resjson);
     } else {
       await fetch(`${API}/rooms/${Id}`, {
         method: "PUT",
@@ -44,7 +49,7 @@ export function Rooms() {
         body: JSON.stringify({
           meters,
           location,
-          type,
+          typeofR,
         }),
       });
 
@@ -57,20 +62,20 @@ export function Rooms() {
   //editRooms
   const editRooms = async (id) => {
     setediting(true);
-    const res = await fetch(`${API}/instructors/${id}`);
+    const res = await fetch(`${API}/rooms/${id}`);
     const dres = await res.json();
     setId(id);
     for (let i = 0; i < dres.length; i++) {
       setmeters(dres[i].meters);
       setlocation(dres[i].location);
-      settype(dres[i].type);
+      settype(dres[i].typeofR);
     }
   };
 
   const deleteRooms = async (id) => {
     const userResponse = window.confirm("Are you sure you want to delete it?");
     if (userResponse) {
-      await fetch(`${API}/user/${id}`, {
+      await fetch(`${API}/rooms/${id}`, {
         method: "DELETE",
       });
       getData();
@@ -135,7 +140,6 @@ export function Rooms() {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">SNO</th>
               <th scope="col">Meters</th>
               <th scope="col">Location</th>
               <th scope="col">Type</th>
@@ -144,18 +148,17 @@ export function Rooms() {
           </thead>
           <tbody>
             {data.map((i) => (
-              <tr key={i.SNO}>
-                <th>{i.SNO}</th>
+              <tr key={i.id}>
                 <td>{i.meters}</td>
                 <td>{i.location}</td>
-                <td>{i.type}</td>
+                <td>{i.typeofR}</td>
                 <td>
                   <button
                     type="button"
                     className="btn btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#updateModal"
-                    onClick={(e) => editRooms(i.SNO)}
+                    onClick={(e) => editRooms(i.id)}
                   >
                     See More...
                   </button>
@@ -213,7 +216,7 @@ export function Rooms() {
                     className="form-control"
                     id="name"
                     onChange={(e) => settype(e.target.value)}
-                    value={type}
+                    value={typeofR}
                   />
                 </form>
               </div>
