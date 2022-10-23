@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
 export function Users() {
   const [Id, setId] = useState("");
+  const [data, setdata] = useState([]);
   const [name, setname] = useState("");
   const [user, setuser] = useState("");
   const [pass, setpass] = useState("");
