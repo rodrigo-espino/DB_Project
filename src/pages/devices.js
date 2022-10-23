@@ -66,9 +66,9 @@ export function Devices() {
     const dres = await res.json();
     setId(id);
     for (let i = 0; i < dres.length; i++) {
-      setmeters(dres[i].meters);
-      setlocation(dres[i].location);
-      settype(dres[i].typeofR);
+      setdescr(dres[i].descr);
+      setst(dres[i].st);
+      setRoomid(dres[i].Room_Id);
     }
   };
 
@@ -84,9 +84,9 @@ export function Devices() {
   //clear variables
   const clearVariables = () => {
     setId("");
-    setRoomid("");
     setdescr("");
     setst("");
+    setRoomid("");
     setediting(false);
   };
 
