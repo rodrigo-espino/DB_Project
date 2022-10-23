@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
+
 export function Devices() {
+
   const [Id, setId] = useState("");
   const [data, setdata] = useState([]);
   const [descr, setdescr] = useState("");
   const [st, setst] = useState("");
-  const [Room_Id, setRoomid] = useState("");
+  const [room_id, setRoomid] = useState("");
   const [editing, setediting] = useState(false);
   //Getting info from RESTAPI
   const getData = async () => {
-    const res = await fetch(`${API}/rooms`);
+    const res = await fetch(`${API}/devices`);
     const rdata = await res.json();
     setdata(rdata);
     console.log("Data")
-    console.log(data);
+    console.log(rdata);
 
   };
 
@@ -26,7 +28,7 @@ export function Devices() {
   //Create a new Device
   const handleSubmit = async (e) => {
     if (!editing) {
-      const res = await fetch(`${API}/rooms`, {
+      const res = await fetch(`${API}/devices`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +36,7 @@ export function Devices() {
         body: JSON.stringify({
           descr,
           st,
-          Room_Id,
+          room_id,
         }),
       });
       const resjson = await res.json();
@@ -49,7 +51,7 @@ export function Devices() {
         body: JSON.stringify({
           descr,
           st,
-          Room_Id,
+          room_id,
         }),
       });
 
@@ -68,14 +70,14 @@ export function Devices() {
     for (let i = 0; i < dres.length; i++) {
       setdescr(dres[i].descr);
       setst(dres[i].st);
-      setRoomid(dres[i].Room_Id);
+      setRoomid(dres[i].room_id);
     }
   };
 
   const deleteDevices = async (id) => {
     const userResponse = window.confirm("Are you sure you want to delete it?");
     if (userResponse) {
-      await fetch(`${API}/rooms/${id}`, {
+      await fetch(`${API}/devices/${id}`, {
         method: "DELETE",
       });
       getData();
@@ -140,9 +142,9 @@ export function Devices() {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">Descr</th>
-              <th scope="col">St</th>
-              <th scope="col">Room_Id</th>
+              <th scope="col">Description</th>
+              <th scope="col">Status</th>
+              <th scope="col">Room Id</th>
               <th scope="col">Options</th>
             </tr>
           </thead>
@@ -151,7 +153,7 @@ export function Devices() {
               <tr key={i.id}>
                 <td>{i.descr}</td>
                 <td>{i.st}</td>
-                <td>{i.Room_Id}</td>
+                <td>{i.room_id}</td>
                 <td>
                   <button
                     type="button"
@@ -194,7 +196,7 @@ export function Devices() {
               <div className="modal-body">
                 {/**Form Modal */}
                 <form onSubmit={handleSubmit}>
-                  <label htmlFor="Name">Descr</label>
+                  <label htmlFor="Name">Description</label>
                   <input
                     type="text"
                     className="form-control"
@@ -202,7 +204,7 @@ export function Devices() {
                     onChange={(e) => setdescr(e.target.value)}
                     value={descr}
                   />
-                  <label htmlFor="Name">Descr</label>
+                  <label htmlFor="Name">Status</label>
                   <input
                     type="text"
                     className="form-control"
@@ -210,13 +212,13 @@ export function Devices() {
                     onChange={(e) => setst(e.target.value)}
                     value={st}
                   />
-                  <label htmlFor="Name">St</label>
+                  <label htmlFor="Name">Room Id</label>
                   <input
                     type="text"
                     className="form-control"
                     id="name"
                     onChange={(e) => setRoomid(e.target.value)}
-                    value={Room_Id}
+                    value={room_id}
                   />
                 </form>
               </div>
