@@ -21,7 +21,7 @@ export function Users() {
 
 
   //Create a new Instructor
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     if (!editing) {
       const res = await fetch(`${API}/users`, {
         method: "POST",
@@ -57,7 +57,7 @@ export function Users() {
   //editInstructor
   const editUsers = async (id) => {
     setediting(true);
-    const res = await fetch(`${API}/instructors/${id}`);
+    const res = await fetch(`${API}/users/${id}`);
     const dres = await res.json();
     setId(id);
     for (let i = 0; i < dres.length; i++) {
@@ -70,7 +70,7 @@ export function Users() {
   const deleteUsers = async (id) => {
     const userResponse = window.confirm("Are you sure you want to delete it?");
     if (userResponse) {
-      await fetch(`${API}/user/${id}`, {
+      await fetch(`${API}/users/${id}`, {
         method: "DELETE",
       });
       getData();
@@ -135,7 +135,6 @@ export function Users() {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col">SNO</th>
               <th scope="col">Name</th>
               <th scope="col">User</th>
               <th scope="col">Pass</th>
@@ -144,8 +143,7 @@ export function Users() {
           </thead>
           <tbody>
             {data.map((i) => (
-              <tr key={i.SNO}>
-                <th>{i.SNO}</th>
+              <tr key={i.id}>
                 <td>{i.name}</td>
                 <td>{i.user}</td>
                 <td>{i.pass}</td>
@@ -155,7 +153,7 @@ export function Users() {
                     className="btn btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#updateModal"
-                    onClick={(e) => editUsers(i.SNO)}
+                    onClick={(e) => editUsers(i.id)}
                   >
                     See More...
                   </button>
@@ -207,9 +205,9 @@ export function Users() {
                     onChange={(e) => setuser(e.target.value)}
                     value={user}
                   />
-                  <label htmlFor="Name">Pass</label>
+                  <label htmlFor="Name">Password</label>
                   <input
-                    type="text"
+                    type="password"
                     className="form-control"
                     id="name"
                     onChange={(e) => setpass(e.target.value)}
