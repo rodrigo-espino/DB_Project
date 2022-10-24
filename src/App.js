@@ -10,6 +10,7 @@ import {Dashboard} from './pages/Dashboard'
 import { Routes, Route } from "react-router-dom";
 import { Users } from './pages/users'
 import { ProtectedRoute, Verify } from './components/ProtectedRoute'
+import {Reservation} from './pages/reservation'
 import Cookies from 'js-cookie'
 
 import {ToastContainer} from 'react-toastify'
@@ -35,6 +36,7 @@ function App() {
         <Route path="/devices" element={<Devices/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/users" element={<Users/>}/>
+        <Route path="/reservation" element={<Reservation/>}/>
       </Route>
       
      </Routes>

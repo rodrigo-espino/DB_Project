@@ -13,7 +13,7 @@ export function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-light">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/dashbord">
+        <a className="navbar-brand" href="/dashboard">
           Dashboard
         </a>
         <button
@@ -64,39 +64,26 @@ export function Navbar() {
               </a>
             </li>
             <li className="nav-item">
+              <a className="nav-link" href="/reservation">
+                Reservation
+              </a>
+            </li>
+            <li className="nav-item">
               <a className="nav-link" href="/users">
                 Users
               </a>
             </li>
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Reports
-              </a>
-              <ul className="dropdown-menu">
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
-              
-            </li>
+            <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Report
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
             <li className="nav-item">
                 <a className="nav-link" onClick={logout}>
                   SignOut
