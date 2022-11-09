@@ -1,32 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
+import { toast } from "react-toastify";
+import Select from "react-select";
 
 export function Devices() {
-
   const [Id, setId] = useState("");
   const [data, setdata] = useState([]);
   const [descr, setdescr] = useState("");
   const [st, setst] = useState("");
   const [room_id, setRoomid] = useState("");
   const [editing, setediting] = useState(false);
+  const [dataRooms, setDataRooms] = useState([]);
   //Getting info from RESTAPI
+
+  let roomsdata = [];
   const getData = async () => {
     const res = await fetch(`${API}/devices`);
     const rdata = await res.json();
     setdata(rdata);
-    console.log("Data")
-    console.log(rdata);
 
+    const res2 = await fetch(`${API}/rooms`);
+    const rdata2 = await res2.json();
+    console.log(rdata2);
+    for (let i = 0; i < rdata2.length; i++) {
+      roomsdata.push({
+        value: rdata2[i].id,
+        label: rdata2[i].meters + " - " + rdata2[i].location,
+      });
+    }
+    setDataRooms(roomsdata);
+    console.log("Data rooms", dataRooms);
   };
 
   //Search Device
-  
-  
-    
-
 
   //Create a new Device
   const handleSubmit = async (e) => {
+    console.log(room_id);
     if (!editing) {
       const res = await fetch(`${API}/devices`, {
         method: "POST",
@@ -40,8 +50,9 @@ export function Devices() {
         }),
       });
       const resjson = await res.json();
-      
+      toast("Device Created", { type: "success" });
       console.log(resjson);
+      clearVariables();
     } else {
       await fetch(`${API}/devices/${Id}`, {
         method: "PUT",
@@ -54,7 +65,7 @@ export function Devices() {
           room_id,
         }),
       });
-
+      toast("Device Updated", { type: "info" });
       getData();
     }
     getData();
@@ -80,6 +91,7 @@ export function Devices() {
       await fetch(`${API}/devices/${id}`, {
         method: "DELETE",
       });
+      toast("Device Deleted", { type: "error" });
       getData();
     }
   };
@@ -96,6 +108,9 @@ export function Devices() {
     getData();
   }, []);
 
+  const handleRoomChange = (id) => {
+    console.log(id);
+  };
   return (
     <>
       <div className="container p-4">
@@ -108,7 +123,7 @@ export function Devices() {
               data-bs-target="#updateModal"
               onClick={() => clearVariables()}
             >
-              Create Devices
+              Create Device
             </button>
           </div>
           <div className="col-6 col-md-4 text-end">
@@ -184,7 +199,7 @@ export function Devices() {
             <div className="modal-content">
               <div className="modal-header">
                 <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                  {editing ? "Edit User" : "Create User"}
+                  {editing ? "Edit Device" : "Create Device"}
                 </h1>
                 <button
                   type="button"
@@ -212,14 +227,21 @@ export function Devices() {
                     onChange={(e) => setst(e.target.value)}
                     value={st}
                   />
-                  <label htmlFor="Name">Room Id</label>
+                  <label htmlFor="Name">Room</label>
+                  
                   <input
-                    type="text"
-                    className="form-control"
-                    id="name"
+                    class="form-control"
+                    list="datalistOptions"
+                    id="exampleDataList"
+                    placeholder="Type to search..."
                     onChange={(e) => setRoomid(e.target.value)}
                     value={room_id}
                   />
+                  <datalist id="datalistOptions">
+                    {dataRooms.map((i) => (
+                      <option value={i.value}>{i.label}</option>
+                    ))}
+                  </datalist>
                 </form>
               </div>
               <div className="modal-footer">
@@ -255,7 +277,6 @@ export function Devices() {
         </div>
 
         {/**Modal Window Delete  */}
-        
       </div>
     </>
   );

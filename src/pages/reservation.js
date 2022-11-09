@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from 'react'
 import {API} from '../components/API'
-
+import { toast } from "react-toastify";
 
 export function Reservation() {
 
 const [data, setData] = useState([]);    
+const [dataMember, setDataMember] = useState([]);
+const [dataSquash, setDataSquash] = useState([]);
 const [member_id, setMember_id] = useState("");
 const [squash_court, setSquash_court] = useState("");
 const [Rdate, setRdate] = useState("");
 const [Rtime, setRtime] = useState("");
 const [editing, setEditing] = useState(false);
+
 const [id, setId] = useState("");
 
 const getData = async () => {
@@ -17,6 +20,15 @@ const getData = async () => {
     const rdata = await res.json();
     setData(rdata);
     console.log(rdata);
+
+    const resMember = await fetch(`${API}/members`)
+    const dataMember = await resMember.json()
+    setDataMember(dataMember)
+    
+    const resSquash = await fetch(`${API}/squash`)
+    const dataSquash = await resSquash.json()
+    setDataSquash(dataSquash)
+    
   };
 
 const clearVariables = async () => {
@@ -47,6 +59,7 @@ const editReservation = async (id) => {
           await fetch(`${API}/reservations/${id}`, {
             method: "DELETE",
           });
+          toast("Reservation Deleted", { type: "error" });
           getData();
         }
       };
@@ -65,6 +78,7 @@ const editReservation = async (id) => {
               Rtime
             }),
           });
+          toast("Reservation Created", { type: "success" });
           const response = await res.json();
             console.log(response);
           
@@ -81,7 +95,7 @@ const editReservation = async (id) => {
                 Rtime
             }),
           });
-    
+          toast("Reservation Updated", { type: "info" });
           getData();
         }
         getData();
@@ -197,20 +211,38 @@ const editReservation = async (id) => {
                 <form onSubmit={handleSubmit}>
                   <label htmlFor="Name">Member</label>
                   <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    onChange={(e) => setMember_id(e.target.value)}
-                    value={member_id}
-                  />
+                  class="form-control"
+                  list="dataMember"
+                  id="DataListM"
+                  placeholder="Type to search..."
+                  onChange={(e) => setMember_id(e.target.value)}
+                  value={member_id}
+                />
+                <datalist id="dataMember">
+                  {
+                    dataMember.map((i) =>(
+                      <option value={i.id}>{i.name}</option>
+                    ))
+                  }
+                </datalist>
+
                   <label htmlFor="Name">Squash Court</label>
                   <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    onChange={(e) => setSquash_court(e.target.value)}
-                    value={squash_court}
-                  />
+                  class="form-control"
+                  list="dataSquash"
+                  id="DataListS"
+                  placeholder="Type to search..."
+                  onChange={(e) => setSquash_court(e.target.value)}
+                  value={squash_court}
+                />
+                <datalist id="dataSquash">
+                  {
+                    dataSquash.map((i) =>(
+                      <option value={i.id}>{i.location}</option>
+                    ))
+                  }
+                </datalist>
+
                   <label htmlFor="Name">Date</label>
                   <input
                     type="date"
@@ -218,6 +250,7 @@ const editReservation = async (id) => {
                     id="name"
                     onChange={(e) => setRdate(e.target.value)}
                     value={Rdate}
+                    
                   />
                   <label htmlFor="Name">Time</label>
                   <input

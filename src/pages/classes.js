@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
+import { toast } from "react-toastify";
 export function Classes() {
   const [dataClasses, setDataClasses] = useState([]);
   const [dataRooms, setdataRooms] = useState([]);
@@ -8,62 +9,59 @@ export function Classes() {
   const [sche, setSche] = useState("");
   const [inst, setInst] = useState("");
   const [id, setId] = useState("");
+  const [dataInst, setDataInst] = useState([]);
   const [roomsSelectedConst, setRoomsSelectedConst] = useState([]); //Rooms already selected
   const [roomsNewUpd, setroomsNewUpd] = useState([]); //Rooms to be added after create/update
 
   const [editing, setEditing] = useState(false);
 
-  let roomsSelected =[]//array of rooms selected
-  let roomsConsultSelected =[] //array of rooms selected for consult
-  let roomsDeleteSelected =[] //array of rooms selected for delete
+  let roomsSelected = []; //array of rooms selected
+  let roomsConsultSelected = []; //array of rooms selected for consult
+  let roomsDeleteSelected = []; //array of rooms selected for delete
 
-  const editClass = async(id) => {
-    clearVariables()
-    setEditing(true)
-    setId(id)
+  const editClass = async (id) => {
+    clearVariables();
+    setEditing(true);
+    setId(id);
     //Data from classes
-    try{
-    const res = await fetch(`${API}/consults/classroom/${id}`)
-    const data = await res.json()
-    console.log("data edit: ",data)
-    setDesc(data[0].description)
-    setSche(data[0].scheduleC)
-    setInst(data[0].inst_id)
-    for(let i=0; i<data.length; i++){
-      roomsConsultSelected.push({
-         id: data[i].room_id,
-         meters: data[i].meters,
-         location: data[i].location
-      })
-     }
-     setRoomsSelectedConst(roomsConsultSelected)
+    try {
+      const res = await fetch(`${API}/consults/classroom/${id}`);
+      const data = await res.json();
+      console.log("data edit: ", data);
+      setDesc(data[0].description);
+      setSche(data[0].scheduleC);
+      setInst(data[0].inst_id);
+      for (let i = 0; i < data.length; i++) {
+        roomsConsultSelected.push({
+          id: data[i].room_id,
+          meters: data[i].meters,
+          location: data[i].location,
+        });
+      }
+      setRoomsSelectedConst(roomsConsultSelected);
+    } catch {
+      const res = await fetch(`${API}/classes/${id}`);
+      const data = await res.json();
+      console.log("data edit: ", data);
+      setDesc(data[0].description);
+      setSche(data[0].scheduleC);
+      setInst(data[0].inst_id);
     }
-    catch{
-    const res = await fetch(`${API}/classes/${id}`)
-    const data = await res.json()
-    console.log("data edit: ",data)
-    setDesc(data[0].description)
-    setSche(data[0].scheduleC)
-    setInst(data[0].inst_id)
-    }
-
-    
 
     //Data not selected from rooms
-    const res2 = await fetch(`${API}/consults/classnotroom/${id}`)
-    const data2 = await res2.json()
-    setroomsNewUpd(data2)
-  }
+    const res2 = await fetch(`${API}/consults/classnotroom/${id}`);
+    const data2 = await res2.json();
+    setroomsNewUpd(data2);
+  };
 
   const handleDeleteRooms = (id) => {
-    if(roomsDeleteSelected.includes(id)){
-      roomsDeleteSelected = roomsDeleteSelected.filter((item) => item !== id)
+    if (roomsDeleteSelected.includes(id)) {
+      roomsDeleteSelected = roomsDeleteSelected.filter((item) => item !== id);
+    } else {
+      roomsDeleteSelected.push(id);
     }
-    else{
-      roomsDeleteSelected.push(id)
-    }
-  }
-  
+  };
+
   const getData = async () => {
     /* Fetching the data from the API and setting the data to the state. */
     const res = await fetch(`${API}/classes`);
@@ -77,6 +75,11 @@ export function Classes() {
 
     console.log("Data Classes: ", dataClasses);
     console.log("Data Rooms: ", dataRooms);
+
+    const resInst = await fetch(`${API}/instructors`);
+    const dataInst = await resInst.json();
+    console.log("dataInst: ", dataInst);
+    setDataInst(dataInst);
   };
 
   const clearVariables = () => {
@@ -86,26 +89,25 @@ export function Classes() {
     setRoomsSelectedConst([]);
     setroomsNewUpd([]);
     setEditing(false);
-    setId("")
+    setId("");
 
     var x = document.getElementsByClassName("form-check-input");
-    for (let i = 0; i <= x.length-1; i++) {
+    for (let i = 0; i <= x.length - 1; i++) {
       document.querySelectorAll("input[type=checkbox]")[i].checked = false;
     }
   };
 
   const handleSelectRooms = (id) => {
-    if(roomsSelected.includes(id)){
-      roomsSelected = roomsSelected.filter((item) => item !== id)
+    if (roomsSelected.includes(id)) {
+      roomsSelected = roomsSelected.filter((item) => item !== id);
+    } else {
+      roomsSelected.push(id);
     }
-    else{
-      roomsSelected.push(id)
-    }
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!editing){
+    if (!editing) {
       const res = await fetch(`${API}/classes`, {
         method: "POST",
         headers: {
@@ -118,66 +120,67 @@ export function Classes() {
         }),
       });
       const data = await res.json();
-      handleAssignRooms(data.id)
-    }
-    else{
-        await fetch(`${API}/classes/${id}`, {
+      handleAssignRooms(data.id);
+      toast("Class Created", { type: "success" });
+    } else {
+      await fetch(`${API}/classes/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-           description: desc,
-           scheduleC: sche,
+          description: desc,
+          scheduleC: sche,
           inst_id: inst,
         }),
       });
-      handleAssignRooms(id)
-      handleDeleteRoomSelected(id)
+      handleAssignRooms(id);
+      handleDeleteRoomSelected(id);
+      toast("Class Updated", { type: "info" });
     }
     getData();
     clearVariables();
   };
 
- const handleAssignRooms = async (id_class) => {
-    console.log(id_class)
+  const handleAssignRooms = async (id_class) => {
+    console.log(id_class);
     roomsSelected.forEach(async (id_room) => {
-
-    const res = await fetch(`${API}/assigned`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        class_id: id_class,
-        room_id: id_room
-      }),
+      const res = await fetch(`${API}/assigned`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          class_id: id_class,
+          room_id: id_room,
+        }),
+      });
     });
-  })
- }
+  };
 
- const handleDeleteRoomSelected = async (id_class) => {
-  roomsDeleteSelected.forEach(async (id_room) => {
-    await fetch(`${API}/assigned/${id_room}/${id_class}`, {
-      method: "DELETE"
-    })
-  })
-}
+  const handleDeleteRoomSelected = async (id_class) => {
+    roomsDeleteSelected.forEach(async (id_room) => {
+      await fetch(`${API}/assigned/${id_room}/${id_class}`, {
+        method: "DELETE",
+      });
+    });
+  };
 
   const handleDeleteClass = async () => {
     const userResponse = window.confirm("Are you sure you want to delete it?");
     if (userResponse) {
-    await fetch(`${API}/classes/${id}`, {
-      method: "DELETE"
-    });
-  }
+      await fetch(`${API}/classes/${id}`, {
+        method: "DELETE",
+      });
+    }
+    toast("Class Deleted", { type: "error" });
     getData();
-    clearVariables()
-  }
+    clearVariables();
+  };
 
   useEffect(() => {
     getData();
-    clearVariables()
+    clearVariables();
   }, []);
 
   return (
@@ -293,122 +296,124 @@ export function Classes() {
                   value={sche}
                 />
                 <label htmlFor="Phone">Instructor</label>
+
                 <input
-                  type="text"
-                  className="form-control"
-                  id="phone"
+                  class="form-control"
+                  list="dataClasses"
+                  id="DataList"
+                  placeholder="Type to search..."
                   onChange={(e) => setInst(e.target.value)}
                   value={inst}
                 />
+                <datalist id="dataClasses">
+                  {
+                    dataInst.map((i) =>(
+                      <option value={i.SNO}>{i.name}</option>
+                    ))
+                  }
+                </datalist>
 
                 <br />
 
                 {/* Card of Rooms */}
                 <div className="card">
-                    <div className="card-header">
-                      <h1 className="card-title fs-5">
-                        {editing ? "Edit Rooms" : "Select Rooms"}
-                      </h1>
-                    </div>
-                <div className="card-body">
-                  <div className="mb-3">
-                    <div className="form-check">
-                      {editing ? (
-                        roomsSelectedConst.map((i) => (
-                          <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="flexCheckChecked"
-                            key={i.id}
-                            onChange={(e) => handleDeleteRooms(i.id)}
-                            checked
-                          />
-                          <label
-                            class="form-check-label"
-                            for="flexCheckDefault"
-                          >
-                            {i.location + " - " + i.meters}
-                          </label>
-                        </div>
-                        ))
-                      )
-                      :(
-                      dataRooms.map((i) => (
-                        <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          id="flexCheckChecked"
-                          key={i.id}
-                          onChange={(e) => handleSelectRooms(i.id)}
-                        />
-                        <label
-                          class="form-check-label"
-                          for="flexCheckDefault"
-                        >
-                          {i.location + " - " + i.meters}
-                        </label>
+                  <div className="card-header">
+                    <h1 className="card-title fs-5">
+                      {editing ? "Edit Rooms" : "Select Rooms"}
+                    </h1>
+                  </div>
+                  <div className="card-body">
+                    <div className="mb-3">
+                      <div className="form-check">
+                        {editing
+                          ? roomsSelectedConst.map((i) => (
+                              <div className="form-check">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  value=""
+                                  id="flexCheckChecked"
+                                  key={i.id}
+                                  onChange={(e) => handleDeleteRooms(i.id)}
+                                  checked
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="flexCheckDefault"
+                                >
+                                  {i.location + " - " + i.meters}
+                                </label>
+                              </div>
+                            ))
+                          : dataRooms.map((i) => (
+                              <div className="form-check">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  value=""
+                                  id="flexCheckChecked"
+                                  key={i.id}
+                                  onChange={(e) => handleSelectRooms(i.id)}
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="flexCheckDefault"
+                                >
+                                  {i.location + " - " + i.meters}
+                                </label>
+                              </div>
+                            ))}
                       </div>
-                      )))}
                     </div>
                   </div>
                 </div>
-                </div>
-                  <br />
+                <br />
                 {/* Select new Rooms */}
                 {editing ? (
-                <div className="card">
+                  <div className="card">
                     <div className="card-header">
-                      <h1 className="card-title fs-5">
-                        Select Rooms
-                      </h1>
+                      <h1 className="card-title fs-5">Select Rooms</h1>
                     </div>
-                <div className="card-body">
-                  <div className="mb-3">
-                    <div className="form-check">
-                      {
-                        roomsNewUpd.map((i) => (
-                          <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="flexCheckChecked"
-                            key={i.id}
-                            onChange={(e) => handleSelectRooms(i.id)}
-                          />
-                          <label
-                            class="form-check-label"
-                            for="flexCheckDefault"
-                          >
-                            {i.location + " - " + i.meters}
-                          </label>
+                    <div className="card-body">
+                      <div className="mb-3">
+                        <div className="form-check">
+                          {roomsNewUpd.map((i) => (
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="flexCheckChecked"
+                                key={i.id}
+                                onChange={(e) => handleSelectRooms(i.id)}
+                              />
+                              <label
+                                class="form-check-label"
+                                for="flexCheckDefault"
+                              >
+                                {i.location + " - " + i.meters}
+                              </label>
+                            </div>
+                          ))}
                         </div>
-                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-                </div>) : null}
+                ) : null}
 
                 {/* End Card New  rooms */}
               </form>
               <div className="modal-footer">
-                {
-                  editing ? (
-                    <button
-                  type="button"
-                  className="btn btn-danger"
-                  data-bs-dismiss="modal"
-                  onClick={() => handleDeleteClass()}
-                >
-                  Delete
-                </button>
-
-                  ) : null
-                }
+                {editing ? (
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    onClick={() => handleDeleteClass()}
+                  >
+                    Delete
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   className="btn btn-secondary"

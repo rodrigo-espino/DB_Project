@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
+import { toast } from "react-toastify";
 
 export function Members() {
   const [data, setData] = useState([]); //Data from Members API
@@ -19,8 +20,10 @@ export function Members() {
   let deleted_classes = []; //Array to store the classes deleted by the member
 
   const editMember = async (id) => {
+    clearVariables()
     setEditing(true);
-    const res = await fetch(`${API}/consults/memclass/${id}`);
+    try{
+      const res = await fetch(`${API}/consults/memclass/${id}`);
     /* Converting the response to a JSON object. */
     const data = await res.json();
 
@@ -39,8 +42,22 @@ export function Members() {
         description: data[i].description,
       });
     }
-    console.log(consult_classes);
     setClassesUpd(consult_classes);
+    }
+    catch{
+    const res = await fetch(`${API}/members/${id}`);
+    const data = await res.json();
+
+    /* Setting the values of the form to the values of the member that is being edited. */
+    setId(id);
+    setName(data[0].name);
+    setAddress(data[0].address);
+    setPhone(data[0].phone);
+    setProfession(data[0].profession);
+    setbank_det(data[0].bank_det);
+
+    }
+    
 
     const resClasses = await fetch(`${API}/consults/membnotc/${id}`);
     const dataClasses = await resClasses.json();
@@ -79,9 +96,11 @@ export function Members() {
     consult_classes = [];
     deleted_classes = [];
     var x = document.getElementsByClassName("form-check-input");
-    for (let i = 0; i <= x.length; i++) {
+    for (let i = 0; i <= x.length-1; i++) {
       document.querySelectorAll("input[type=checkbox]")[i].checked = false;
     }
+    setClassesUpd([]);
+    setNewClassesUpdate([]);
   };
 
   const handleSubmit = async (e) => {
@@ -107,6 +126,7 @@ export function Members() {
       console.log(classes_selected);
       getData();
       clearVariables();
+      toast('Member Created', {type: 'success'})
     } else {
       console.log(id)
       const res = await fetch(`${API}/members/${id}`, {
@@ -129,6 +149,7 @@ export function Members() {
       if (deleted_classes.length > 0) {
         handleDeleteClasses(id);
       }
+      toast('Member Updated', {type: 'info'})
       getData();
       clearVariables();
     }
@@ -176,6 +197,7 @@ export function Members() {
         method: "DELETE",
       });
     }
+    toast('Member Deleted', {type: 'error'})
     getData();
   };
 

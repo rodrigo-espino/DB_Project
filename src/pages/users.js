@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
+import {toast} from 'react-toastify'
 export function Users() {
   const [Id, setId] = useState("");
   const [data, setdata] = useState([]);
@@ -34,6 +35,7 @@ export function Users() {
           pass,
         }),
       });
+      toast('User Created', {type: 'success'})
       await res.json();
     } else {
       await fetch(`${API}/users/${Id}`, {
@@ -49,6 +51,7 @@ export function Users() {
       });
 
       getData();
+      toast('User Updated', {type: 'info'})
     }
     getData();
     clearVariables();
@@ -73,6 +76,7 @@ export function Users() {
       await fetch(`${API}/users/${id}`, {
         method: "DELETE",
       });
+      toast('User Deleted', {type: 'error'})
       getData();
     }
   };

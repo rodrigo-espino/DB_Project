@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
+import {toast} from 'react-toastify'
 export function Instructors() {
   const [Id, setId] = useState("");
   const [data, setdata] = useState([]);
@@ -37,6 +38,7 @@ export function Instructors() {
         }),
       });
       await res.json();
+      toast('Instructor Created', {type: 'success'})
     } else {
       await fetch(`${API}/instructors/${Id}`, {
         method: "PUT",
@@ -50,7 +52,7 @@ export function Instructors() {
           degree,
         }),
       });
-
+      toast('Member Updated', {type: 'info'})
       getData();
     }
     getData();
@@ -77,6 +79,7 @@ export function Instructors() {
       await fetch(`${API}/instructors/${id}`, {
         method: "DELETE",
       });
+      toast('Instructor Deleted', {type: 'error'})
       getData();
     }
   };

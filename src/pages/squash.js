@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { API } from "../components/API";
+import {toast} from 'react-toastify'
 export function Squash() {
   const [Id, setId] = useState("");
   const [data, setdata] = useState([]);
@@ -32,6 +33,7 @@ export function Squash() {
           cond,
         }),
       });
+      toast('Squash Created', {type: 'success'})
       await res.json();
     } else {
       await fetch(`${API}/squash/${Id}`, {
@@ -44,7 +46,7 @@ export function Squash() {
           cond,
         }),
       });
-
+      toast('Squash Updated', {type: 'info'})
       getData();
     }
     getData();
@@ -70,6 +72,7 @@ export function Squash() {
         method: "DELETE",
       });
       getData();
+      toast('Squash Deleted', {type: 'error'})
     }
   };
   //clear variables

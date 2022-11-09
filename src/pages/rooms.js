@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API } from "../components/API";
+import {toast} from 'react-toastify'
 export function Rooms() {
   const [Id, setId] = useState("");
   const [data, setdata] = useState([]);
@@ -38,7 +39,7 @@ export function Rooms() {
         }),
       });
       const resjson = await res.json();
-      
+      toast('Room Added', {type: 'success'})
       console.log(resjson);
     } else {
       await fetch(`${API}/rooms/${Id}`, {
@@ -52,7 +53,7 @@ export function Rooms() {
           typeofR,
         }),
       });
-
+      toast('Room Updated', {type: 'info'})
       getData();
     }
     getData();
@@ -78,6 +79,7 @@ export function Rooms() {
       await fetch(`${API}/rooms/${id}`, {
         method: "DELETE",
       });
+      toast('Room Deleted', {type: 'error'})
       getData();
     }
   };
