@@ -11,15 +11,16 @@ import { Routes, Route } from "react-router-dom";
 import { Users } from './pages/users'
 import { ProtectedRoute, Verify } from './components/ProtectedRoute'
 import {Reservation} from './pages/reservation'
+import { ClassbyInst } from './pages/Reports/ClassbyInst'
 import Cookies from 'js-cookie'
-
 import {ToastContainer} from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { PDFViewer } from '@react-pdf/renderer';
 
 function App() {
   return (
     <>
     <ToastContainer/>
+        
      <Routes>
     
       <Route element={<Verify c = {Cookies.get('Session')}/>}> 
@@ -37,11 +38,21 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/users" element={<Users/>}/>
         <Route path="/reservation" element={<Reservation/>}/>
+          <Route path="/report/classbyinst" element={
+            <PDFViewer style={{width:"100%", height:"100vh"}}>
+              <ClassbyInst/>
+
+            </PDFViewer>
+            
+          }/>
+
       </Route>
       
      </Routes>
+
     </>
   );
+  
 }
 
 export default App;
