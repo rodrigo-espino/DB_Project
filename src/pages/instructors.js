@@ -47,7 +47,7 @@ export function Instructors() {
         },
         body: JSON.stringify({
           name,
-          phone,
+          phone_i:phone,
           experience,
           degree,
         }),
@@ -67,7 +67,7 @@ export function Instructors() {
     setId(id);
     for (let i = 0; i < dres.length; i++) {
       setname(dres[i].name);
-      setphone(dres[i].phone);
+      setphone(dres[i].phone_i);
       setExp(dres[i].experience);
       setdegree(dres[i].degree);
     }
@@ -156,7 +156,7 @@ export function Instructors() {
               <tr key={i.SNO}>
                 <th>{i.SNO}</th>
                 <td>{i.name}</td>
-                <td>{i.phone}</td>
+                <td>{i.phone_i}</td>
                 <td>{i.experience}</td>
                 <td>{i.degree}</td>
                 <td>

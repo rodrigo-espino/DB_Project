@@ -11,7 +11,7 @@ export function Navbar() {
 
 
   return (
-    <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
+    <nav className="navbar sticky-top navbar-expand-lg bg-dark navbar-dark">
       <div className="container-fluid">
         <a className="navbar-brand" href="/dashboard">
           Dashboard
@@ -79,9 +79,11 @@ export function Navbar() {
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="/report/classbyinst">Class & Instructors</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="/report/membnclass">Members & Classes</a></li>
+            <li><a class="dropdown-item" href="/report/membyinst">Members & Instructors</a></li>
+            <li><a class="dropdown-item" href="/report/devices">Devices</a></li>
+            <li><a class="dropdown-item" href="/report/devicesbyroom">Devices / Rooms</a></li>
             
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
             <li className="nav-item">

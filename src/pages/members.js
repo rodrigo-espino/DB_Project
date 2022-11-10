@@ -29,7 +29,7 @@ export function Members() {
 
     /* Setting the values of the form to the values of the member that is being edited. */
     setId(id);
-    setName(data[0].name);
+    setName(data[0].name_m);
     setAddress(data[0].address);
     setPhone(data[0].phone);
     setProfession(data[0].profession);
@@ -77,7 +77,7 @@ export function Members() {
     const res = await fetch(`${API}/members`);
     const data = await res.json();
     setData(data);
-
+    console.log("data", data);
     //Getting data class
     const res_class = await fetch(`${API}/classes`);
     const data_class = await res_class.json();
@@ -135,7 +135,7 @@ export function Members() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
+          name_m:name,
           address,
           phone,
           profession,
@@ -261,7 +261,7 @@ export function Members() {
           <tbody>
             {data.map((item) => (
               <tr key={item.id}>
-                <td>{item.name}</td>
+                <td>{item.name_m}</td>
                 <td>{item.address}</td>
                 <td>{item.phone}</td>
                 <td>{item.profession}</td>
